@@ -1,0 +1,41 @@
+﻿@model IEnumerable<MyCinema.Models.Movie>
+
+@{
+    ViewBag.Title = "Movies List";
+}
+
+<h2>Movies list</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    @{
+        foreach (var item in Model)
+        {
+            <tr style="max-height: 150px;">
+                <td>
+                    @if (item.picture != null && item.picture.Length > 0)
+                    {
+                        <img src="data:image;base64,@System.Convert.ToBase64String(item.picture)" style="max-height: 150px; max-width: 300px;" />
+                    }
+                </td>
+                <td valign="top" style="position:relative;">
+                    <div>
+                        @Html.Label("Movie: ", htmlAttributes: new { @class = "control-label font-weight-bold" })
+                        @Html.DisplayFor(modelItem => item.name)
+                    </div>
+                    <div>
+                        (@Html.DisplayFor(modelItem => item.duration) minutes)
+                    </div>
+                    <div>
+                        @Html.Label("Resume: ", htmlAttributes: new { @class = "control-label font-weight-bold" })
+                    </div>
+                    <div style="position:absolute; bottom:0;">
+                        @Html.ActionLink("Edit", "Edit", new { id = item.id }) | @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                    </div>
+                </td>
+            </tr>
+        }
+    }
+</table>

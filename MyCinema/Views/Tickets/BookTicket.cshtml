@@ -1,0 +1,145 @@
+﻿@using MyCinema.ViewModels;
+@{
+    ViewBag.Title = "Ticket-Book";
+}
+
+<h2>Book a ticket for</h2>
+<h3>@ViewBag.projection.Movie.name</h3>
+<h4>@ViewBag.projection.Room.Cinema.name (@string.Format("{0:dd/MM/yyyy - HH:mm }h", ViewBag.projection.start_date))</h4>
+<br />
+@Html.Label("Room:") @ViewBag.projection.room_id
+<br /><br />
+<div class="container" style="position:relative;">
+    <div class="container">
+        <div style="display:block; height:10px; width: 500px; background-color: black" title="Movie screen"></div>
+    </div>
+    <br />
+    <div class="container">
+        @{
+            List<List<SeatModel>> rows = new List<List<SeatModel>>();
+            List<SeatModel> currentRowSeats = new List<SeatModel>();
+            int currentRow = 1;
+            foreach (var item in ViewBag.seats)
+            {
+                if (item.Seat.row <= currentRow)
+                {
+                    currentRowSeats.Add(item);
+                }
+                else
+                {
+                    rows.Add(currentRowSeats);
+                    currentRowSeats = new List<SeatModel>();
+                    currentRow = item.Seat.row;
+                    currentRowSeats.Add(item);
+                }
+            }
+            rows.Add(currentRowSeats);
+
+            int longestRow = 0;
+            foreach (var row in rows)
+            {
+                if (longestRow < row.Count)
+                {
+                    longestRow = row.Count;
+                }
+            }
+            int longestRowMiddle = (longestRow % 2 == 0) ? (longestRow / 2) : (longestRow / 2) + 1;
+
+            foreach (var row in rows)
+            {
+                // display normally the longest row
+                if (row.Count == longestRow)
+                {
+                    foreach (var seat in row)
+                    {
+                        if (!seat.Available)
+                        {
+                            <div id="@seat.Seat.id" class="seat_red" title="Row: @seat.Seat.row, Seat: @seat.Seat.col"></div>
+                        }
+                        else
+                        {
+                            <div id="@seat.Seat.id" class="seat_blue" title="Row: @seat.Seat.row, Seat: @seat.Seat.col" onclick="changeColor(this.id)"></div>
+                        }
+                    }
+                }
+                // add some elements infront of the shorter column
+                else
+                {
+                    int currentRowMiddle = (row.Count % 2 == 0) ? (row.Count / 2) : (row.Count / 2) + 1;
+                    int currentRowStartIndex = longestRowMiddle - currentRowMiddle;
+
+                    for (int i = 0; i < currentRowStartIndex; i++)
+                    {
+                        <div class="seat_blue" style="visibility:hidden"></div>
+                    }
+                    foreach (var seat in row)
+                    {
+                        if (!seat.Available)
+                        {
+                            <div id="@seat.Seat.id" class="seat_red" title="Row: @seat.Seat.row, Seat: @seat.Seat.col"></div>
+                        }
+                        else
+                        {
+                            <div id="@seat.Seat.id" class="seat_blue" title="Row: @seat.Seat.row, Seat: @seat.Seat.col" onclick="changeColor(this.id)"></div>
+                        }
+                    }
+                }
+                <br />
+            }
+        }
+    </div>
+    <div class="container">
+        <span class="mr-5">
+            @Html.ActionLink("Back to List", "MovieProjections", "Movies", new { movie_id = ViewBag.projection.movie_id }, null)
+        </span>
+        <span class="ml-5">
+            <button type="button" class="btn-outline-dark" id="btn-reserve" onclick="reserveSeats()">Reserve</button>
+        </span>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        function changeColor(clicked_id) {
+            var element = document.getElementById(clicked_id);
+
+            if (element.classList.contains("seat_blue")) {
+                element.setAttribute("class", "seat_green");
+            }
+            else if (element.classList.contains("seat_green")) {
+                element.setAttribute("class", "seat_blue");
+            }
+        }
+
+        function reserveSeats() {
+            var myArray = $(".seat_green");
+            var selectedIDs = [];
+            myArray.each(function (i, e) {
+                selectedIDs.push($(e).attr('id'));
+            });
+
+            if (selectedIDs != null && selectedIDs.length > 0) {
+                document.getElementById("btn-reserve").disabled = true;
+
+                $.ajax({
+                    url: "/Tickets/BookingCompleted",
+                    type: "GET",
+                    data: { pro_id: @ViewBag.projection.id, seats: selectedIDs.toString() },
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+
+                    }
+                });
+
+                alert("Reservation Successful! Go to profile to check your tickets!");
+            }
+        }
+    </script>
+}
+
+

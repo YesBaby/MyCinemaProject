@@ -1,0 +1,45 @@
+﻿@model MyCinema.Models.Cinema
+
+@{
+    ViewBag.Title = "Cinema Details";
+}
+
+<h2>Cinema Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.Label("Cinema name")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+        <dt>
+            @Html.Label("Cinema address")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.address)
+        </dd>
+        <dt>
+            @Html.Label("Cinema rooms")
+        </dt>
+        <dd>
+            @{
+                int roomNum = 1;
+                foreach (var room in Model.Room)
+                {
+                    <div>
+                        @Html.ActionLink("Room " + roomNum.ToString(), "Details", "Rooms", new { id = room.id }, null)
+                        - @Html.Label(room.Seat.Count.ToString() + " seats")
+                    </div>
+                    roomNum++;
+                }
+            }
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index") | 
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id })
+</p>

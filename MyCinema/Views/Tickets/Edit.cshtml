@@ -1,0 +1,75 @@
+﻿@model MyCinema.Models.Ticket
+
+@{
+    ViewBag.Title = "Ticket-Edit";
+}
+
+<h2>Edit Ticket</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal col-md-10">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.id)
+        <div class="form-group">
+            @Html.LabelFor(model => model.projection_id, "Projection", htmlAttributes: new { @class = "control-label font-weight-bold" })
+            @*@Html.DropDownListFor(model => model.projection_id, ViewBag.projection_id as SelectList, htmlAttributes: new { @class = "form-control" })*@
+            @Html.DropDownList("projection_id", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.projection_id, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.user_id, "Username", htmlAttributes: new { @class = "control-label font-weight-bold" })
+            @Html.DropDownList("user_id", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.user_id, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.seat_id, "Seat number", htmlAttributes: new { @class = "control-label font-weight-bold" })
+            @*@Html.DropDownListFor(model => model.seat_id, ViewBag.seat_id as SelectList, htmlAttributes: new { @class = "form-control" })*@
+            @Html.DropDownList("seat_id", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.seat_id, "", new { @class = "text-danger" })
+            <div id="error" class="text-danger" style="display:none">No free seats available!</div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.price, "Ticket Price ($)", htmlAttributes: new { @class = "control-label font-weight-bold" })
+            @Html.EditorFor(model => model.price, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.price, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            <div class="mr-5" style="display:inline-block">
+                @Html.ActionLink("Back to List", "Index")
+            </div>         
+            <div class="ml-5" style="display:inline-block">
+                <input type="submit" value="Save" class="btn btn-outline-dark" />
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+
+    <script>
+    $(document).ready(function () {
+        $("#projection_id").change(function () {
+            $.get("/Tickets/GetSeats", {projectionID: $("#projection_id").val() }, function (data) {
+                $("#seat_id").empty();
+                if (data && data != "") {
+                    $.each(data, function (index, row) {
+                        $("#seat_id").append("<option value='" + row.id + "'>" + "Room: " + row.room_id + " (Row: " + row.row + ", Seat: " + row.col + ")</option>")
+                    });
+                    document.getElementById("error").style.display = "none";
+                }
+                else {
+                    document.getElementById("error").style.display = "block";
+                }
+            });
+        })
+    });
+    </script>
+}

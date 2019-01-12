@@ -1,0 +1,65 @@
+﻿@model MyCinema.Models.Ticket
+
+@{
+    ViewBag.Title = "Ticket-Delete";
+}
+
+<h3>Are you sure you want to delete this Ticket?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @if (Model.Projection.Movie.picture != null && Model.Projection.Movie.picture.Length > 0)
+            {
+                <img src="data:image;base64,@System.Convert.ToBase64String(Model.Projection.Movie.picture)" style="max-height: 150px; max-width: 300px;" />
+            }
+        </dt>
+        <dt>
+            Projection
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Projection.Movie.name) (@Html.DisplayFor(model => model.Projection.start_date))
+        </dd>
+        <dt>
+            Cinema
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Projection.Room.Cinema.name)
+        </dd>
+        <dt>
+            Room
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Seat.Room.id)
+        </dd>
+        <dt>
+            User
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.User.name)
+        </dd>
+        <dt>
+            Seat
+        </dt>
+        <dd>
+            Row: @Html.DisplayFor(model => model.Seat.row), Seat: @Html.DisplayFor(model => model.Seat.col)
+        </dd>
+        <dt>
+            Price
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.price)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            @Html.ActionLink("Back to List", "Index") | 
+            <input type="submit" value="Delete" class="btn btn-outline-dark" />
+        </div>
+    }
+</div>

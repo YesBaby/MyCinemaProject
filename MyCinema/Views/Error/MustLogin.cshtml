@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Must Be Logged In!";
+}
+<div class="jumbotron">
+    <h2 class="display-4">You have to be logged-in to view that content!</h2>
+    <p class="lead">
+        This page is only for people with accounts!
+        <br />
+        Please @Html.ActionLink("Log In", "Login", "Users") to your account in order to see it!
+        <br />
+        If you don't have an account yet click @Html.ActionLink("here", "Register", "Users") to register!
+    </p>
+    <button type="button" class="btn btn-outline-dark float-right" onclick="@("window.location.href='" + @Url.Action("Login", "Users") + "'");">Login</button>
+</div>
+
+@section Styles{
+    @Styles.Render("~/Content/css")
+}

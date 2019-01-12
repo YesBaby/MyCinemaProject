@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="410d74ec1b5f416aa3e8ac6071125291" Name="Diagram1">
+        <EntityTypeShape EntityType="CinemaDBModel.Cinema" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CinemaDBModel.Movie" Width="1.5" PointX="2.875" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CinemaDBModel.Projection" Width="1.5" PointX="2.875" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="CinemaDBModel.Room" Width="1.5" PointX="0.5" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CinemaDBModel.Seat" Width="1.5" PointX="5.25" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="CinemaDBModel.sysdiagrams" Width="1.5" PointX="7.5" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="CinemaDBModel.Ticket" Width="1.5" PointX="5.25" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CinemaDBModel.User" Width="1.5" PointX="7.5" PointY="0.5" IsExpanded="true" />
+        <AssociationConnector Association="CinemaDBModel.FK_Room_Cinema" ManuallyRouted="false" />
+        <AssociationConnector Association="CinemaDBModel.FK_Projection_Movie" ManuallyRouted="false" />
+        <AssociationConnector Association="CinemaDBModel.FK_Projection_Room" ManuallyRouted="false" >
+        </AssociationConnector>
+        <AssociationConnector ManuallyRouted="true" Association="CinemaDBModel.FK_Ticket_Projection">
+          <ConnectorPoint PointX="4.375" PointY="3" />
+          <ConnectorPoint PointX="4.75" PointY="2.625" />
+          <ConnectorPoint PointX="4.75" PointY="3.4321907552083331" />
+          <ConnectorPoint PointX="5.1674458668470624" PointY="3.4321907552083331" />
+          <ConnectorPoint PointX="5.25" PointY="3.0571907552083331" />
+        </AssociationConnector>
+        <AssociationConnector Association="CinemaDBModel.FK_Seat_Room" ManuallyRouted="false" />
+        <AssociationConnector Association="CinemaDBModel.FK_Ticket_Seat" ManuallyRouted="false" >
+        </AssociationConnector>
+        <AssociationConnector Association="CinemaDBModel.FK_Ticket_User" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

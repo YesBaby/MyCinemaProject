@@ -1,0 +1,39 @@
+﻿@model MyCinema.Models.Seat
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h3>Are you sure you want to delete this Seat?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.Label("Cinema and Room ID")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Room.Cinema.name) - Room: @Html.DisplayFor(model => model.room_id)
+        </dd>
+        <dt>
+            @Html.Label("Row ")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.row)
+        </dd>
+        <dt>
+            @Html.Label("Seat")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.col)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            @Html.ActionLink("Back to List", "Index") |
+            <input type="submit" value="Delete" class="btn btn-outline-dark" />
+        </div>
+    }
+</div>

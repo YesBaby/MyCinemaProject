@@ -1,0 +1,50 @@
+﻿@model MyCinema.Models.Projection
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Projection</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.start_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.start_date)
+        </dd>
+
+        <dt>
+            Available seats
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Room.Seat.Count)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Movie.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Movie.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Room.id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Room.id)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

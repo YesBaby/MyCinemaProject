@@ -1,0 +1,42 @@
+﻿@model MyCinema.Models.Seat
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Seat</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.row)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.row)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.col)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.col)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Room.id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Room.id)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

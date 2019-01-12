@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "MovieProjections";
+}
+<br />
+<div>
+    <div style="display:inline-block">
+        <img src="data:image;base64,@System.Convert.ToBase64String(ViewBag.currentMovie.picture)" style="height: 250px; max-width: 300px;" />
+    </div>
+    <div style="display:inline-block; position:relative; vertical-align:top;">
+        <div>
+            <h2>@ViewBag.currentMovie.name</h2>
+        </div>
+        <div>
+            Movie duration: @ViewBag.currentMovie.duration minutes
+        </div>
+        <div>
+            <div>
+                Actors: ...
+            </div>
+            <div>
+                Resume: ...
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<h3>Projections:</h3>
+<br />
+<table class="table">
+    <tr>
+        <th>
+            @Html.Label("Cinema and Room")
+        </th>
+        <th>
+            @Html.Label("Start date")
+        </th>
+        <th>
+            @Html.Label("Available Seats")
+        </th>
+        <td></td>
+    </tr>
+    @foreach (var projection in ViewBag.movieProjections)
+    {
+        <tr>
+            <td>
+                @projection.Room.Cinema.name<br />
+                (Room: @projection.room_id)
+            </td>
+            <td>
+                @string.Format("{0:dd/MM/yyyy - HH:mm }h", projection.start_date)
+            </td>
+            <td>
+                @{
+                    CinemaDBConnection db = new CinemaDBConnection();
+                    List<Ticket> tickets = db.Ticket.ToList();
+                    int seatsTaken = 0;
+                    foreach (var ticket in tickets)
+                    {
+                        if (ticket.projection_id == projection.id)
+                        {
+                            seatsTaken++;
+                        }
+                    }
+                    db.Dispose();
+                    <div>@(projection.Room.Seat.Count - seatsTaken) out of @projection.Room.Seat.Count</div>
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Book a ticket", "BookTicket", "Tickets", new { projection_id = projection.id}, null)
+            </td>
+        </tr>
+    }
+</table>
+
+

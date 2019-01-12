@@ -1,0 +1,66 @@
+﻿@model IEnumerable<MyCinema.Models.Ticket>
+
+@{
+    ViewBag.Title = "Ticket-List";
+}
+
+<h2>Tickets list</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+
+        </th>
+        <th>
+            Projection
+        </th>
+        <th>
+            User
+        </th>
+        <th>
+            Seat
+        </th>
+        <th>
+            Price
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @if (item.Projection.Movie.picture != null && item.Projection.Movie.picture.Length > 0)
+                {
+                    <img src="data:image;base64,@System.Convert.ToBase64String(item.Projection.Movie.picture)" style="max-height: 150px; max-width: 300px;" />
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Projection.Movie.name)
+                <br />@string.Format("{0:dd/MM/yyyy - HH:mm }h", item.Projection.start_date)
+                <br />
+                <br />@Html.DisplayFor(modelItem => item.Seat.Room.Cinema.name)
+                <br />Room: @Html.DisplayFor(modelItem => item.Seat.room_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.name)
+            </td>
+            <td>
+                Row: @Html.DisplayFor(modelItem => item.Seat.row)
+                <br />Seat: @Html.DisplayFor(modelItem => item.Seat.col)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.price)
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.id })
+            </td>
+        </tr>
+    }
+
+</table>

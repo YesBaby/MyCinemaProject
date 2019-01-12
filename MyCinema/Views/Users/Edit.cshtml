@@ -1,0 +1,50 @@
+﻿@model MyCinema.Models.User
+
+@{
+    ViewBag.Title = "Users-Edit";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal col-md-10">
+        <h3>Edit user</h3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label font-weight-bold" })
+            @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label font-weight-bold" })
+            @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <span class="mr-4">
+                @Html.LabelFor(model => model.is_admin, htmlAttributes: new { @class = "control-label font-weight-bold" })
+                <span class="checkbox">
+                    @Html.EditorFor(model => model.is_admin)
+                    @Html.ValidationMessageFor(model => model.is_admin, "", new { @class = "text-danger" })
+                </span>
+            </span>
+            <span class="ml-5">
+                <input type="submit" value="Save Changes" class="btn btn-outline-dark" />
+            </span>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

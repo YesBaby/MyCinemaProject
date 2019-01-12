@@ -1,0 +1,125 @@
+﻿@model MyCinema.ViewModels.UserProfileViewModel
+@{
+    ViewBag.Title = "User-Panel";
+}
+@using MyCinema.Security;
+<h2>Welcome back @SessionPersister.Username</h2>
+
+<h5>
+    <u>
+        Edit profile:
+    </u>
+</h5>
+<br />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.EditorFor(model => model.CurrentPassword, new { htmlAttributes = new { @class = "form-control", @placeholder = "Current Password", @type = "password" } })
+        @Html.ValidationMessageFor(model => model.CurrentPassword, "", new { @class = "text-danger" })
+    </div>
+    <div style="color:red">
+        @ViewBag.PasswordError
+    </div>
+    <div class="form-group">
+        @Html.EditorFor(model => model.NewPassword, new { htmlAttributes = new { @class = "form-control", @placeholder = "New Password", @type = "password" } })
+        @Html.ValidationMessageFor(model => model.NewPassword, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @placeholder = "Confirm New Password", @type = "password" } })
+        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+    </div>
+    <div style="color:red">
+        @ViewBag.SaveError
+    </div>
+    <div class="form-group">
+        <span mr-5></span>
+        <span ml-5>
+            <input type="submit" value="Save Changes" class="btn btn-outline-dark" />
+        </span>
+    </div>
+    <div style="color:forestgreen">
+        @ViewBag.Success
+    </div>
+}
+
+<p>
+    <h5><u>My Tickets:</u></h5>
+    @ViewBag.TicketError
+    <br />
+    <table class="table">
+        <tr>
+            <th>
+                @Html.Label("ID")
+            </th>
+            <th>
+                @Html.Label("Movie title")
+            </th>
+            <th>
+                @Html.Label("Date")
+            </th>
+            <th>
+                @Html.Label("Seat")
+            </th>
+            <th>
+                @Html.Label("Price")
+            </th>
+            <th></th>
+        </tr>
+        @{
+            if (ViewBag.userTicketsList != null)
+            {
+                if (ViewBag.userTicketsList.Count != 0)
+                {
+                    foreach (var ticket in ViewBag.userTicketsList)
+                    {
+                        <tr>
+                            <td>
+                                @ticket.id
+                            </td>
+                            <td>
+                                @if (ticket.Projection.Movie.picture != null && ticket.Projection.Movie.picture.Length > 0)
+                                {
+                                    <div>
+                                        <img src="data:image;base64,@System.Convert.ToBase64String(ticket.Projection.Movie.picture)" style="max-height: 150px; max-width: 300px;" />
+                                    </div>
+                                }
+                                <div style="text-align:center">
+                                    @ticket.Projection.Movie.name
+                                </div>
+                            </td>
+                            <td>
+                                @string.Format("{0:dd/MM/yyyy - HH:mm }h", ticket.Projection.start_date)
+                            </td>
+                            <td>
+                                Row: @ticket.Seat.row
+                                <br />Seat: @ticket.Seat.col
+                            </td>
+                            <td>
+                                @string.Format("{0:C}", ticket.price)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Cancel ticket", "DeleteTicketForUser", "Tickets", new { id = ticket.id }, null)
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" style="color:red">@Html.Label("You don't have any reserved tickets!")</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" style="color:red">@Html.Label("You don't have any reserved tickets! bam")</td>
+                </tr>
+            }
+
+        }
+    </table>
+</p>
+<br />
+

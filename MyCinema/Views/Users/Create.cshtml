@@ -1,0 +1,49 @@
+﻿@model MyCinema.ViewModels.RegisterViewModel
+@{ 
+    var is_admin = ViewContext.RouteData.Values["is_admin"];
+}
+@{
+    ViewBag.Title = "Create";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal col-md-10">
+        <h3>Create new User</h3>
+        <hr />
+        <div style="color:red">
+            @ViewBag.Error
+        </div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", @placeholder = "Username" } })
+            @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @placeholder = "Password", @type = "password"} })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @placeholder = "Confirm Password", @type = "password" } })
+            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group"> 
+            <span class="mr-5">
+                @Html.Label("Admin", htmlAttributes: new { @class = "control-label font-weight-bold" })
+                <input type="checkbox" name="is_admin" value="true"/>
+            </span>       
+            <span class="ml-5">
+                <input type="submit" value="Create" class="btn btn-outline-dark" />
+            </span>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

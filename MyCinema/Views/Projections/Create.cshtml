@@ -1,0 +1,65 @@
+﻿@model MyCinema.Models.Projection
+
+@{
+    ViewBag.Title = "Projection-Create";
+}
+
+<h2>Create new Projection</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal col-md-10">
+        <hr />
+        <div class="text-danger">
+            @ViewBag.Error
+        </div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.start_date, "Start Date", htmlAttributes: new { @class = "control-label font-weight-bold" })
+            @Html.TextBoxFor(model => model.start_date, new { @class = "form-control", @id = "calendar", @readonly = "readonly" }) <!-- MAGIC -->
+            @Html.ValidationMessageFor(model => model.start_date, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.movie_id, "Movie Name", htmlAttributes: new { @class = "control-label font-weight-bold" })
+            @Html.DropDownList("movie_id", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.movie_id, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.room_id, "Cinema - (Room #)", htmlAttributes: new { @class = "control-label font-weight-bold" })
+            @Html.DropDownList("room_id", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.room_id, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <div class="mr-5" style="display: inline-block">
+                @Html.ActionLink("Back to List", "Index")
+            </div>      
+            <div class="ml-5" style="display: inline-block">
+                <input type="submit" value="Create" class="btn btn-outline-dark" />
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Styles{
+    <link href="~/Content/dhtmlxcalendar.css" rel="stylesheet" />
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Content/dhtmlxcalendar.js"></script>
+
+    <script>
+        var myCalendar = new dhtmlXCalendarObject("calendar");
+        myCalendar.setDateFormat("%d/%m/%Y %H:%i:%s");
+        myCalendar.setSkin("material");
+    </script>
+}
+
