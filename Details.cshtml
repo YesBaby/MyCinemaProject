@@ -1,0 +1,141 @@
+﻿@model MyCinema.Models.Room
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Room</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.Label("Room ID")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.id)
+        </dd>
+        <dt>
+            @Html.Label("Cinema name")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Cinema.name)
+        </dd>
+        <dt>
+            @Html.Label("Seats")
+        </dt>
+        <dd>
+            <div class="container">
+                <div style="display:block; height:10px; width: 500px; background-color: black" title="Movie screen"></div>
+            </div>
+            <div class="container">
+                @{
+                    List<Seat> seats = new List<Seat>();
+                    foreach (var seat in Model.Seat)
+                    {
+                        seats.Add(seat);
+                    }
+                    List<Seat> ordered = seats.OrderBy(seat => seat.row).ThenBy(seat => seat.col).ToList();
+
+                    List<List<Seat>> rows = new List<List<Seat>>();
+                    List<Seat> currentRowSeats = new List<Seat>();
+                    int currentRow = 1;
+                    foreach (var seat in ordered)
+                    {
+                        if (seat.row <= currentRow)
+                        {
+                            currentRowSeats.Add(seat);
+                        }
+                        else
+                        {
+                            rows.Add(currentRowSeats);
+                            currentRowSeats = new List<Seat>();
+                            currentRow = seat.row;
+                            currentRowSeats.Add(seat);
+                        }
+                    }
+                    rows.Add(currentRowSeats);
+
+                    int longestRow = 0;
+                    foreach (var row in rows)
+                    {
+                        if (longestRow < row.Count)
+                        {
+                            longestRow = row.Count;
+                        }
+                    }
+                    int longestRowMiddle = (longestRow % 2 == 0) ? (longestRow / 2) : (longestRow / 2) + 1;
+
+                    foreach (var row in rows)
+                    {
+                        // display normally the longest row
+                        if (row.Count == longestRow)
+                        {
+                            foreach (var seat in row)
+                            {
+                                <div id="@seat.row,@seat.col" class="seat_blue" title="Row: @seat.row, Seat: @seat.col" onclick="changeColor(this.id)"></div>
+                            }
+                        }
+                        // add some elements infront of the shorter column
+                        else
+                        {
+                            int currentRowMiddle = (row.Count % 2 == 0) ? (row.Count / 2) : (row.Count / 2) + 1;
+                            int currentRowStartIndex = longestRowMiddle - currentRowMiddle;
+
+                            for (int i = 0; i < currentRowStartIndex; i++)
+                            {
+                                <div class="seat_blue" style="visibility:hidden"></div>
+                            }
+                            foreach (var seat in row)
+                            {
+                                <div id="@seat.row,@seat.col" class="seat_blue" title="Row: @seat.row, Seat: @seat.col" onclick="changeColor(this.id)"></div>
+                            }
+                        }
+                        <br/>
+                    }
+                }
+            </div>
+            <div class="container">
+                <div class="navbar-btn">
+                    <button type="button" class="btn-default" id="btn-reserve">Add Seat</button>
+                </div>
+            </div>
+        </dd>
+    </dl>
+</div>
+<br />
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+@section Styles{
+    @Styles.Render("~/Content/css")
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        function changeColor(clicked_id) {
+            var element = document.getElementById(clicked_id);
+
+            if (element.classList.contains("seat_blue")) {
+                element.setAttribute("class", "seat_green");
+            }
+            else if (element.classList.contains("seat_green")) {
+                element.setAttribute("class", "seat_blue");
+            }
+        }  
+
+        function addSeat() {
+            
+        }
+
+        function reserveSeats() {
+            
+        }
+    </script>
+}
